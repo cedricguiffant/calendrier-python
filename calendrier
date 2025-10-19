@@ -1,0 +1,33 @@
+calendrier = []
+
+select = ""
+
+while select != "exit":
+    print("ajouter un evenement")
+    print("ajouter tous les evenements")
+    print("exit")
+    
+    select = input("Ton select ? ")
+    
+    if select == "1":
+        date = input("entrer date aaaa-mm-jj : ")
+        desc = input("entrer evenement : ")
+        evenement = {"date": date, "evenement": desc}
+        print("Événement ajouté !")
+    
+    if select == "2":
+        if not calendrier:
+            print("Aucun événement.")
+        else:
+            print("Tes événements :")
+            for event in calendrier:
+                print(f"{event['date']} : {event['evenement']}")
+    
+    if select == "exit":
+        print("au revoir")
+        break
+    
+    if select != "1" and select != "2" and select != "exit":
+        print("select invalide")
+
+print("Fin du programme.")
