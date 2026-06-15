@@ -37,6 +37,17 @@ data class ChampionKnowledgeEntry(
 
 object ChampionKnowledge {
 
+    private fun defaultChampion(name: String): ChampionKnowledgeEntry = ChampionKnowledgeEntry(
+        name = name,
+        role = "UNKNOWN",
+        strongAgainst = emptyList(),
+        weakAgainst = emptyList(),
+        matchups = emptyList(),
+        threat = ThreatInfo(2, "$name est un champion de League of Legends", "Consultez op.gg pour les stratégies", "niveau 6"),
+        synergies = emptyList(),
+        generalTips = listOf("Farmez en sécurité", "Suivez votre équipe", "Utilisez votre ultime avec sagesse", "Achetez les objets appropriés")
+    )
+
     val knowledgeBase: Map<String, ChampionKnowledgeEntry> = mapOf(
 
         "Yasuo" to ChampionKnowledgeEntry(
@@ -1274,7 +1285,7 @@ object ChampionKnowledge {
         }
     }
 
-    fun getThreatInfo(champion: String): ThreatInfo? = knowledgeBase[champion]?.threat
+    fun getThreatInfo(champion: String): ThreatInfo? = (knowledgeBase[champion] ?: defaultChampion(champion)).threat
 
     fun getSynergies(champion1: String, champion2: String): SynergyInfo? {
         val entry = knowledgeBase[champion1] ?: return null
