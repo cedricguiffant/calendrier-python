@@ -10,10 +10,12 @@ import com.lolinsight.presentation.analysis.AnalysisScreen
 import com.lolinsight.presentation.camera.CameraScreen
 import com.lolinsight.presentation.history.HistoryScreen
 import com.lolinsight.presentation.home.HomeScreen
+import com.lolinsight.presentation.manual.ManualInputScreen
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Camera : Screen("camera")
+    object ManualInput : Screen("manual")
     object Analysis : Screen("analysis?analysisId={analysisId}") {
         fun createRoute(analysisId: Long = -1L) = "analysis?analysisId=$analysisId"
     }
@@ -31,7 +33,19 @@ fun NavGraph() {
         composable(Screen.Home.route) {
             HomeScreen(
                 onNavigateToCamera = { navController.navigate(Screen.Camera.route) },
+                onNavigateToManual = { navController.navigate(Screen.ManualInput.route) },
                 onNavigateToHistory = { navController.navigate(Screen.History.route) }
+            )
+        }
+
+        composable(Screen.ManualInput.route) {
+            ManualInputScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToAnalysis = { analysisId ->
+                    navController.navigate(Screen.Analysis.createRoute(analysisId)) {
+                        popUpTo(Screen.ManualInput.route) { inclusive = true }
+                    }
+                }
             )
         }
 

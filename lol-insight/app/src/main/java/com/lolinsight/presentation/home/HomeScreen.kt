@@ -64,6 +64,7 @@ import com.lolinsight.ui.theme.TextSecondary
 @Composable
 fun HomeScreen(
     onNavigateToCamera: () -> Unit,
+    onNavigateToManual: () -> Unit,
     onNavigateToHistory: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -141,30 +142,28 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Main CTA Button
+            // Main CTA Button — Photo
             Button(
                 onClick = onNavigateToCamera,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = LolGold
-                ),
+                modifier = Modifier.fillMaxWidth().height(64.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = LolGold),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.CameraAlt,
-                    contentDescription = null,
-                    tint = LolDark,
-                    modifier = Modifier.size(24.dp)
-                )
+                Icon(Icons.Default.CameraAlt, contentDescription = null, tint = LolDark, modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "Analyser une photo",
-                    color = LolDark,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Text("Analyser une photo", color = LolDark, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            }
+
+            // Bouton saisie manuelle
+            OutlinedButton(
+                onClick = onNavigateToManual,
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                shape = RoundedCornerShape(12.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, LolGold.copy(alpha = 0.6f))
+            ) {
+                Icon(Icons.Default.Star, contentDescription = null, tint = LolGold, modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.width(10.dp))
+                Text("Saisie manuelle des champions", color = LolGold, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
             }
 
             // Stats Row
