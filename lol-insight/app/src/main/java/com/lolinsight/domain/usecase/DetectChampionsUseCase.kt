@@ -21,6 +21,8 @@ data class DetectedTeams(
 class DetectChampionsUseCase @Inject constructor(
     private val championRepository: ChampionRepository
 ) {
+    // Créé une seule fois pour éviter les fuites mémoire
+    private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     // All champion names for matching
     private val allChampionNames = listOf(
         "Aatrox", "Ahri", "Akali", "Akshan", "Alistar", "Amumu", "Anivia", "Annie", "Aphelios",
@@ -68,8 +70,6 @@ class DetectChampionsUseCase @Inject constructor(
     private suspend fun recognizeText(bitmap: Bitmap): String {
         return suspendCancellableCoroutine { continuation ->
             val image = InputImage.fromBitmap(bitmap, 0)
-            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-
             recognizer.process(image)
                 .addOnSuccessListener { visionText ->
                     continuation.resume(visionText.text)
