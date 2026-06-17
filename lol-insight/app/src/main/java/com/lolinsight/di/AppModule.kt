@@ -5,11 +5,10 @@ import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.lolinsight.data.local.AppDatabase
-import com.lolinsight.data.local.dao.AnalysisHistoryDao
 import com.lolinsight.data.local.dao.ChampionDao
 import com.lolinsight.data.remote.DataDragonApi
-import com.lolinsight.data.repository.AnalysisRepositoryImpl
 import com.lolinsight.data.repository.ChampionRepositoryImpl
+import com.lolinsight.data.repository.InMemoryAnalysisRepository
 import com.lolinsight.domain.repository.AnalysisRepository
 import com.lolinsight.domain.repository.ChampionRepository
 import dagger.Module
@@ -64,16 +63,11 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "lol_insight_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton
     fun provideChampionDao(database: AppDatabase): ChampionDao = database.championDao()
-
-    @Provides
-    @Singleton
-    fun provideAnalysisHistoryDao(database: AppDatabase): AnalysisHistoryDao =
-        database.analysisHistoryDao()
 
     @Provides
     @Singleton
@@ -85,7 +79,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAnalysisRepository(
-        analysisHistoryDao: AnalysisHistoryDao,
-        gson: Gson
-    ): AnalysisRepository = AnalysisRepositoryImpl(analysisHistoryDao, gson)
+        inMemoryAnalysisRepository: InMemoryAnalysisRepository
+    ): AnalysisRepository = inMemoryAnalysisRepository
 }
